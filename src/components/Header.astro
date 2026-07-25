@@ -1,29 +1,38 @@
 ---
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const homeUrl = base ? `${base}/` : '/';
 ---
-<header class="sticky top-0 z-50 backdrop-blur-md bg-zinc-950/80 border-b border-zinc-800/60">
+<header class="sticky top-0 z-50 backdrop-blur-xl bg-zinc-950/80 border-b border-zinc-800/80 transition-all">
   <div class="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
-    <!-- Static Profile & Branding -->
-    <a href="/" class="flex items-center gap-3 group">
-      <div class="relative w-9 h-9 rounded-full overflow-hidden border border-zinc-700/80 group-hover:border-zinc-500 transition-colors bg-zinc-900 flex items-center justify-center">
-        <!-- Static Avatar Image from /public/avatar.png -->
+    <!-- Brand / Return to Home Link -->
+    <a href={homeUrl} class="flex items-center gap-3 group" title="Return to home page">
+      <div class="relative w-9 h-9 rounded-full overflow-hidden border border-zinc-700/80 group-hover:border-zinc-400 transition-colors bg-zinc-900 flex items-center justify-center shrink-0">
         <img 
-          src="/avatar.png" 
+          src={`${base}/avatar.png`} 
           alt="Kuzey Zeyneloğlu" 
           class="w-full h-full object-cover"
           onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
         />
-        <!-- Fallback initials if avatar.png is missing -->
         <span class="hidden text-xs font-mono font-bold text-zinc-300">KZ</span>
       </div>
-      <span class="font-semibold tracking-tight text-zinc-100 group-hover:text-white transition-colors">
-        kuzyy<span class="text-zinc-500">.com</span>
-      </span>
+      <div class="flex flex-col">
+        <span class="font-semibold text-sm tracking-tight text-zinc-100 group-hover:text-white transition-colors">
+          kuzyy<span class="text-zinc-500">.com</span>
+        </span>
+        <span class="text-[10px] font-mono text-zinc-500 group-hover:text-zinc-400 transition-colors">
+          ← main page
+        </span>
+      </div>
     </a>
 
     <!-- Navigation Links -->
-    <nav class="flex items-center gap-6 text-sm font-medium text-zinc-400">
-      <a href="#projects" class="hover:text-zinc-100 transition-colors">Projects</a>
-      <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="hover:text-zinc-100 transition-colors flex items-center gap-1">
+    <nav class="flex items-center gap-5 text-sm font-medium text-zinc-400">
+      <a href={homeUrl} class="hover:text-zinc-100 transition-colors">Home</a>
+      <a href={`${homeUrl}#projects`} class="hover:text-zinc-100 transition-colors">Projects</a>
+      <a href="https://github.com/kuzeyzey11/dotfiles" target="_blank" rel="noopener noreferrer" class="hover:text-zinc-100 transition-colors flex items-center gap-1 hidden sm:inline-flex">
+        Dotfiles <span class="text-xs text-zinc-600">↗</span>
+      </a>
+      <a href="https://github.com/kuzeyzey11" target="_blank" rel="noopener noreferrer" class="hover:text-zinc-100 transition-colors flex items-center gap-1 border border-zinc-800 bg-zinc-900/60 px-3 py-1 rounded-full text-xs text-zinc-300 hover:border-zinc-700 hover:text-white">
         GitHub
       </a>
     </nav>
