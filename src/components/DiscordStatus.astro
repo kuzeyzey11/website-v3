@@ -1,0 +1,403 @@
+---
+// DiscordStatus.astro
+const DISCORD_ID = "813830720740130826";
+---
+
+<div id="discord-card" class="discord-card">
+  <div class="user-header">
+    <div class="avatar-container">
+      <img id="discord-avatar" class="avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Discord Avatar" />
+      <span id="status-indicator" class="status-indicator offline"></span>
+    </div>
+    <div class="user-info">
+      <div class="name-row">
+        <span id="discord-name" class="display-name">kuzyy</span>
+        <span id="discord-username" class="username">@kuzeyzey11</span>
+      </div>
+      <div id="custom-status" class="custom-status">website soon.</div>
+    </div>
+  </div>
+
+  <div id="music-container" class="music-container hidden">
+    <div class="music-header">
+      <span id="music-source-tag" class="source-tag">Listening</span>
+    </div>
+    <div class="music-content">
+      <img id="album-art" class="album-art" src="" alt="Album Art" />
+      <div class="track-info">
+        <div id="track-title" class="track-title">Loading...</div>
+        <div id="track-artist" class="track-artist">Artist</div>
+        <div id="track-album" class="track-album">Album</div>
+      </div>
+    </div>
+    <div class="progress-section">
+      <div class="progress-bar-bg">
+        <div id="progress-bar" class="progress-bar-fill" style="width: 0%;"></div>
+      </div>
+      <div class="time-row">
+        <span id="time-elapsed">0:00</span>
+        <span id="time-duration">0:00</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .discord-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 16px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #e0e0e0;
+    max-width: 420px;
+    backdrop-filter: blur(8px);
+  }
+
+  .user-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .avatar-container {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+  }
+
+  .avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .status-indicator {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid #121212;
+  }
+
+  .status-indicator.online { background-color: #23a55a; }
+  .status-indicator.idle { background-color: #f0b232; }
+  .status-indicator.dnd { background-color: #f23f43; }
+  .status-indicator.offline { background-color: #80848e; }
+
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .name-row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+
+  .display-name {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #ffffff;
+  }
+
+  .username {
+    font-size: 0.8rem;
+    color: #8e9297;
+  }
+
+  .custom-status {
+    font-size: 0.85rem;
+    color: #b9bbbe;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .music-container {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .music-container.hidden {
+    display: none;
+  }
+
+  .music-header {
+    margin-bottom: 8px;
+  }
+
+  .source-tag {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #1db954;
+    font-weight: 600;
+  }
+
+  .music-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .album-art {
+    width: 52px;
+    height: 52px;
+    border-radius: 8px;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .track-info {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .track-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .track-artist {
+    font-size: 0.85rem;
+    color: #b9bbbe;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .track-album {
+    font-size: 0.75rem;
+    color: #72767d;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .progress-section {
+    margin-top: 10px;
+  }
+
+  .progress-bar-bg {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: #1db954;
+    transition: width 0.3s linear;
+  }
+
+  .time-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: #8e9297;
+    margin-top: 4px;
+  }
+</style>
+
+<script is:inline define:vars={{ DISCORD_ID }}>
+  let activeData = null;
+
+  function formatMs(ms) {
+    if (!ms || ms < 0 || isNaN(ms)) return '0:00';
+    const totalSec = Math.floor(ms / 1000);
+    const m = Math.floor(totalSec / 60);
+    const s = Math.floor(totalSec % 60);
+    return `${m}:${s < 10 ? '0' : ''}${s}`;
+  }
+
+  function resolveImageUrl(activity) {
+    if (!activity || !activity.assets || !activity.assets.large_image) return null;
+    const raw = activity.assets.large_image;
+
+    if (raw.startsWith('mp:external/')) {
+      return `https://media.discordapp.net/${raw.replace('mp:', '')}`;
+    }
+    if (raw.startsWith('spotify:')) {
+      return `https://i.scdn.co/image/${raw.replace('spotify:', '')}`;
+    }
+    if (raw.startsWith('http://') || raw.startsWith('https://')) {
+      return raw;
+    }
+    if (activity.application_id) {
+      return `https://cdn.discordapp.com/app-assets/${activity.application_id}/${raw}.png`;
+    }
+    return null;
+  }
+
+  function updatePresenceUI(d) {
+    activeData = d;
+    if (!d) return;
+
+    // 1. User Header & Status
+    const avatarImg = document.getElementById('discord-avatar');
+    const statusDot = document.getElementById('status-indicator');
+    const nameEl = document.getElementById('discord-name');
+    const unameEl = document.getElementById('discord-username');
+    const customStatusEl = document.getElementById('custom-status');
+
+    if (d.discord_user) {
+      const u = d.discord_user;
+      if (u.avatar && avatarImg) {
+        avatarImg.src = `https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.png?size=128`;
+      }
+      if (nameEl) nameEl.textContent = u.global_name || u.display_name || u.username;
+      if (unameEl) unameEl.textContent = `@${u.username}`;
+    }
+
+    if (statusDot) {
+      statusDot.className = `status-indicator ${d.discord_status || 'offline'}`;
+    }
+
+    const customAct = d.activities?.find(a => a.type === 4);
+    if (customStatusEl) {
+      customStatusEl.textContent = customAct ? customAct.state || '' : '';
+    }
+
+    // 2. Music Presence
+    const musicContainer = document.getElementById('music-container');
+    const sourceTag = document.getElementById('music-source-tag');
+    const albumArt = document.getElementById('album-art');
+    const trackTitle = document.getElementById('track-title');
+    const trackArtist = document.getElementById('track-artist');
+    const trackAlbum = document.getElementById('track-album');
+
+    let musicInfo = null;
+
+    if (d.listening_to_spotify && d.spotify) {
+      const sp = d.spotify;
+      musicInfo = {
+        title: sp.song,
+        artist: sp.artist,
+        album: sp.album,
+        art: sp.album_art_url,
+        source: 'Listening to Spotify',
+        color: '#1db954'
+      };
+    } else {
+      const listeningAct = d.activities?.find(a => a.type === 2);
+      if (listeningAct) {
+        musicInfo = {
+          title: listeningAct.details || 'Unknown Track',
+          artist: listeningAct.state || 'Unknown Artist',
+          album: listeningAct.assets?.large_text || '',
+          art: resolveImageUrl(listeningAct),
+          source: `Listening on ${listeningAct.name || 'Music'}`,
+          color: '#ff5500'
+        };
+      }
+    }
+
+    if (musicInfo && musicContainer) {
+      musicContainer.classList.remove('hidden');
+      if (sourceTag) {
+        sourceTag.textContent = musicInfo.source;
+        sourceTag.style.color = musicInfo.color;
+      }
+      if (trackTitle) trackTitle.textContent = musicInfo.title;
+      if (trackArtist) trackArtist.textContent = musicInfo.artist;
+      if (trackAlbum) trackAlbum.textContent = musicInfo.album;
+      if (albumArt && musicInfo.art) albumArt.src = musicInfo.art;
+    } else if (musicContainer) {
+      musicContainer.classList.add('hidden');
+    }
+
+    renderTimestamps();
+  }
+
+  function renderTimestamps() {
+    if (!activeData) return;
+
+    let timestamps = null;
+    if (activeData.listening_to_spotify && activeData.spotify) {
+      timestamps = activeData.spotify.timestamps;
+    } else {
+      const listeningAct = activeData.activities?.find(a => a.type === 2);
+      if (listeningAct) timestamps = listeningAct.timestamps;
+    }
+
+    const elapsedEl = document.getElementById('time-elapsed');
+    const durationEl = document.getElementById('time-duration');
+    const progressBar = document.getElementById('progress-bar');
+
+    if (timestamps && timestamps.start) {
+      const now = Date.now();
+      const elapsed = Math.max(0, now - timestamps.start);
+
+      if (timestamps.end) {
+        const duration = timestamps.end - timestamps.start;
+        const pct = Math.min(100, Math.max(0, (elapsed / duration) * 100));
+
+        if (elapsedEl) elapsedEl.textContent = formatMs(elapsed);
+        if (durationEl) durationEl.textContent = formatMs(duration);
+        if (progressBar) progressBar.style.width = `${pct}%`;
+      } else {
+        if (elapsedEl) elapsedEl.textContent = formatMs(elapsed);
+        if (durationEl) durationEl.textContent = 'Live';
+        if (progressBar) progressBar.style.width = '100%';
+      }
+    }
+  }
+
+  function initLanyardWebSocket() {
+    const ws = new WebSocket('wss://api.lanyard.rest/socket');
+    let heartbeatInterval = null;
+
+    ws.onopen = () => {
+      ws.send(JSON.stringify({
+        op: 2,
+        d: { subscribe_to_id: DISCORD_ID }
+      }));
+    };
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.op === 1) {
+        heartbeatInterval = setInterval(() => {
+          ws.send(JSON.stringify({ op: 3 }));
+        }, data.d.heartbeat_interval);
+      } else if (data.t === 'INIT_STATE' || data.t === 'PRESENCE_UPDATE') {
+        updatePresenceUI(data.d);
+      }
+    };
+
+    ws.onclose = () => {
+      if (heartbeatInterval) clearInterval(heartbeatInterval);
+      setTimeout(initLanyardWebSocket, 5000);
+    };
+  }
+
+  // Initial REST fetch + WebSocket startup
+  fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`)
+    .then(res => res.json())
+    .then(json => {
+      if (json.success) updatePresenceUI(json.data);
+    })
+    .catch(console.error);
+
+  initLanyardWebSocket();
+
+  // Tick progress bar every second
+  setInterval(renderTimestamps, 1000);
+</script>
