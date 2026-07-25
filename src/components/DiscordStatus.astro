@@ -30,7 +30,7 @@ const DISCORD_ID = "813830720740130826";
         <div id="track-album" class="track-album">Album</div>
       </div>
     </div>
-    <div class="progress-section">
+    <div id="progress-section" class="progress-section">
       <div class="progress-bar-bg">
         <div id="progress-bar" class="progress-bar-fill" style="width: 0%;"></div>
       </div>
@@ -52,6 +52,7 @@ const DISCORD_ID = "813830720740130826";
     color: #e0e0e0;
     max-width: 420px;
     backdrop-filter: blur(8px);
+    width: 100%;
   }
 
   .user-header {
@@ -127,7 +128,8 @@ const DISCORD_ID = "813830720740130826";
     border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
 
-  .music-container.hidden {
+  .music-container.hidden,
+  .progress-section.hidden {
     display: none;
   }
 
@@ -227,6 +229,11 @@ const DISCORD_ID = "813830720740130826";
     return `${m}:${s < 10 ? '0' : ''}${s}`;
   }
 
+  function normalizeMs(ts) {
+    if (!ts) return null;
+    return ts < 100000000000 ? ts * 1000 : ts;
+  }
+
   function resolveImageUrl(activity) {
     if (!activity || !activity.assets || !activity.assets.large_image) return null;
     const raw = activity.assets.large_image;
@@ -275,7 +282,7 @@ const DISCORD_ID = "813830720740130826";
       customStatusEl.textContent = customAct ? customAct.state || '' : '';
     }
 
-    // 2. Music Presence
+    // 2. Music Presence (Catches Spotify native or PreMiD/RPC media activities)
     const musicContainer = document.getElementById('music-container');
     const sourceTag = document.getElementById('music-source-tag');
     const albumArt = document.getElementById('album-art');
@@ -296,14 +303,15 @@ const DISCORD_ID = "813830720740130826";
         color: '#1db954'
       };
     } else {
-      const listeningAct = d.activities?.find(a => a.type === 2);
-      if (listeningAct) {
+      // Find any non-custom activity carrying details or media timestamps (PreMiD / RPC)
+      const mediaAct = d.activities?.find(a => a.type !== 4 && (a.details || a.timestamps || a.assets));
+      if (mediaAct) {
         musicInfo = {
-          title: listeningAct.details || 'Unknown Track',
-          artist: listeningAct.state || 'Unknown Artist',
-          album: listeningAct.assets?.large_text || '',
-          art: resolveImageUrl(listeningAct),
-          source: `Listening on ${listeningAct.name || 'Music'}`,
+          title: mediaAct.details || 'Unknown Track',
+          artist: mediaAct.state || 'Unknown Artist',
+          album: mediaAct.assets?.large_text || mediaAct.name || '',
+          art: resolveImageUrl(mediaAct),
+          source: `Playing on ${mediaAct.name || 'Browser'}`,
           color: '#ff5500'
         };
       }
@@ -333,30 +341,44 @@ const DISCORD_ID = "813830720740130826";
     if (activeData.listening_to_spotify && activeData.spotify) {
       timestamps = activeData.spotify.timestamps;
     } else {
-      const listeningAct = activeData.activities?.find(a => a.type === 2);
-      if (listeningAct) timestamps = listeningAct.timestamps;
+      const mediaAct = activeData.activities?.find(a => a.type !== 4 && (a.details || a.timestamps || a.assets));
+      if (mediaAct) timestamps = mediaAct.timestamps;
     }
 
     const elapsedEl = document.getElementById('time-elapsed');
     const durationEl = document.getElementById('time-duration');
     const progressBar = document.getElementById('progress-bar');
+    const progressSection = document.getElementById('progress-section');
 
-    if (timestamps && timestamps.start) {
-      const now = Date.now();
-      const elapsed = Math.max(0, now - timestamps.start);
+    if (!timestamps || !timestamps.start) {
+      if (progressSection) progressSection.classList.add('hidden');
+      return;
+    }
 
-      if (timestamps.end) {
-        const duration = timestamps.end - timestamps.start;
-        const pct = Math.min(100, Math.max(0, (elapsed / duration) * 100));
+    if (progressSection) progressSection.classList.remove('hidden');
 
-        if (elapsedEl) elapsedEl.textContent = formatMs(elapsed);
-        if (durationEl) durationEl.textContent = formatMs(duration);
-        if (progressBar) progressBar.style.width = `${pct}%`;
-      } else {
-        if (elapsedEl) elapsedEl.textContent = formatMs(elapsed);
-        if (durationEl) durationEl.textContent = 'Live';
-        if (progressBar) progressBar.style.width = '100%';
+    const startMs = normalizeMs(timestamps.start);
+    const endMs = normalizeMs(timestamps.end);
+    const now = Date.now();
+
+    let elapsed = Math.max(0, now - startMs);
+
+    if (endMs && endMs > startMs) {
+      const duration = endMs - startMs;
+      
+      if (elapsed > duration) {
+        elapsed = duration;
       }
+
+      const pct = Math.min(100, Math.max(0, (elapsed / duration) * 100));
+
+      if (elapsedEl) elapsedEl.textContent = formatMs(elapsed);
+      if (durationEl) durationEl.textContent = formatMs(duration);
+      if (progressBar) progressBar.style.width = `${pct}%`;
+    } else {
+      if (elapsedEl) elapsedEl.textContent = formatMs(elapsed);
+      if (durationEl) durationEl.textContent = '--:--';
+      if (progressBar) progressBar.style.width = '100%';
     }
   }
 
@@ -388,7 +410,6 @@ const DISCORD_ID = "813830720740130826";
     };
   }
 
-  // Initial REST fetch + WebSocket startup
   fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`)
     .then(res => res.json())
     .then(json => {
@@ -398,6 +419,5 @@ const DISCORD_ID = "813830720740130826";
 
   initLanyardWebSocket();
 
-  // Tick progress bar every second
   setInterval(renderTimestamps, 1000);
 </script>

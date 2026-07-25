@@ -1,29 +1,24 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-
-const stack = [
-  { category: 'OS', items: 'Arch Linux (Hyprland + Wayland)' },
-  { category: 'Terminal', items: 'Kitty + Fish Shell' },
-  { category: 'Editor', items: 'Neovim / VS Code' },
-  { category: 'Hardware', items: 'Custom Linux workstation & handheld mods' },
-  { category: 'Brewing', items: 'Espresso & portable Aeropress setup' }
-];
 ---
 
-<BaseLayout title="uses — kuzyy" description="hardware and software used daily by kuzyy">
-  <div class="max-w-2xl mx-auto py-8 sm:py-16 space-y-8">
+<BaseLayout title="uses — kuzyy" description="Hardware, software, and tools kuzyy uses daily.">
+  <div class="max-w-2xl mx-auto py-12 sm:py-20 space-y-8">
     <div class="space-y-2 border-b border-[#1f1f23] pb-4">
-      <h1 class="text-lg font-medium text-[#fafafa]">uses</h1>
-      <p class="text-xs text-[#a1a1aa]">the gear, tools, and software I rely on daily.</p>
+      <h1 class="text-lg font-medium text-[#fafafa]">/uses</h1>
+      <p class="text-xs text-[#a1a1aa]">gear, software, and setup details.</p>
     </div>
 
-    <div class="space-y-4">
-      {stack.map((item) => (
-        <div class="flex items-start justify-between text-xs border-b border-[#1f1f23] pb-3">
-          <span class="text-[#a1a1aa] w-1/3 font-mono">{item.category}</span>
-          <span class="text-[#fafafa] w-2/3">{item.items}</span>
-        </div>
-      ))}
+    <div class="space-y-6 text-xs text-[#a1a1aa] leading-relaxed">
+      <section class="space-y-2">
+        <h2 class="text-sm font-medium text-[#fafafa]">system</h2>
+        <ul class="list-disc list-inside space-y-1">
+          <li>OS: Arch Linux</li>
+          <li>WM: Hyprland</li>
+          <li>Terminal: Kitty</li>
+          <li>Editor: Neovim</li>
+        </ul>
+      </section>
     </div>
   </div>
 </BaseLayout>

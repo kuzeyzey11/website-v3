@@ -6,9 +6,16 @@ export interface CommandResult {
 }
 
 export const COMMANDS = [
-  'help', 'about', 'projects', 'blog', 'uses', 'now',
-  'socials', 'github', 'clear', 'whoami', 'date', 'fastfetch', 'cat'
+  'help', 'ls', 'cat', 'about', 'projects', 'blog', 'uses', 'now',
+  'socials', 'github', 'discord', 'email', 'clear', 'whoami', 'date', 'fastfetch'
 ];
+
+const VIRTUAL_FILES: Record<string, string> = {
+  'about.txt': 'kuzyy — student & open-source builder based in türkiye. focused on linux, local ai, and minimal tools.',
+  'contact.txt': 'email: kuzeyzeyneloglu@gmail.com\ngithub: https://github.com/kuzeyzey11\nx/twitter: https://x.com/turkfidelcastro\ninstagram: https://instagram.com/turkfidelcastro\ndiscord: https://discord.com/users/813830720740130826 (kuzeyzey11)\nwhatsapp: +90 534 373 7560',
+  'stack.txt': 'arch linux, hyprland, neovim, kitty, astro, tailwind, typescript, lua, bash',
+  'secrets.txt': 'nice try. zero secrets found here.'
+};
 
 export function executeCommand(rawInput: string): CommandResult {
   const trimmed = rawInput.trim();
@@ -22,19 +29,33 @@ export function executeCommand(rawInput: string): CommandResult {
     case 'help':
       return {
         output: `available commands:
+  ls         list virtual files
+  cat        read a virtual file (e.g. cat contact.txt)
   about      who is kuzyy
   projects   navigate to /projects
   blog       navigate to /blog
   uses       navigate to /uses
   now        navigate to /now
+  socials    list verified social links
+  email      get email address
+  discord    open discord profile
   fastfetch  system summary
-  cat        read virtual files (try: cat about.txt)
-  socials    open github profile
   clear      clear terminal buffer`
       };
 
+    case 'ls':
+      return { output: Object.keys(VIRTUAL_FILES).join('   ') };
+
+    case 'cat':
+      if (!args[0]) return { output: 'usage: cat <filename>' };
+      const file = args[0].toLowerCase();
+      if (file in VIRTUAL_FILES) {
+        return { output: VIRTUAL_FILES[file] };
+      }
+      return { output: `cat: ${args[0]}: No such file or directory` };
+
     case 'about':
-      return { output: 'student & builder based in türkiye. exploring linux, local ai, and minimal web apps.' };
+      return { output: VIRTUAL_FILES['about.txt'] };
 
     case 'projects':
       return { output: 'redirecting to /projects...', navigate: '/projects' };
@@ -48,8 +69,24 @@ export function executeCommand(rawInput: string): CommandResult {
     case 'now':
       return { output: 'redirecting to /now...', navigate: '/now' };
 
-    case 'github':
     case 'socials':
+      return {
+        output: `verified contact & socials:
+  email      kuzeyzeyneloglu@gmail.com
+  github     https://github.com/kuzeyzey11
+  x/twitter  https://x.com/turkfidelcastro
+  instagram  https://instagram.com/turkfidelcastro
+  discord    https://discord.com/users/813830720740130826
+  whatsapp   https://wa.me/905343737560`
+      };
+
+    case 'email':
+      return { output: 'kuzeyzeyneloglu@gmail.com' };
+
+    case 'discord':
+      return { output: 'opening discord profile...', openUrl: 'https://discord.com/users/813830720740130826' };
+
+    case 'github':
       return { output: 'opening github profile...', openUrl: 'https://github.com/kuzeyzey11' };
 
     case 'whoami':
@@ -70,13 +107,6 @@ editor: neovim
 terminal: kitty
 stack: astro + tailwind`
       };
-
-    case 'cat':
-      if (!args[0]) return { output: 'usage: cat <filename>' };
-      const file = args[0].toLowerCase();
-      if (file === 'about.txt') return { output: 'kuzyy — student, open-source enthusiast, builder.' };
-      if (file === 'secrets.txt') return { output: 'nice try.' };
-      return { output: `cat: ${args[0]}: No such file or directory` };
 
     case 'clear':
     case 'cls':

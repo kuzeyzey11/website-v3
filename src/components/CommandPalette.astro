@@ -1,0 +1,81 @@
+---
+---
+<dialog id="cmd-dialog" class="bg-transparent backdrop:bg-black/70 p-4 max-w-lg w-full fixed inset-0 m-auto rounded-xl">
+  <div class="bg-[#0c0c0e] border border-[#27272a] rounded-xl overflow-hidden shadow-2xl space-y-2 p-3 font-mono">
+    <div class="flex items-center gap-2 px-2 border-b border-[#1f1f23] pb-2">
+      <span class="text-[#a1a1aa] text-xs">⌘</span>
+      <input
+        id="cmd-input"
+        type="text"
+        placeholder="Type a command or page..."
+        class="bg-transparent text-sm text-[#fafafa] placeholder-[#52525b] outline-none w-full"
+      />
+      <kbd class="text-[10px] bg-[#18181b] border border-[#27272a] px-1.5 py-0.5 rounded text-[#a1a1aa]">ESC</kbd>
+    </div>
+
+    <div id="cmd-list" class="space-y-1 max-h-64 overflow-y-auto pt-1">
+      <a href="/" class="cmd-item flex items-center justify-between p-2 rounded text-xs text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa]">
+        <span>/ home</span>
+        <span class="text-[10px] text-[#52525b]">Jump</span>
+      </a>
+      <a href="/projects" class="cmd-item flex items-center justify-between p-2 rounded text-xs text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa]">
+        <span>/projects</span>
+        <span class="text-[10px] text-[#52525b]">Jump</span>
+      </a>
+      <a href="/blog" class="cmd-item flex items-center justify-between p-2 rounded text-xs text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa]">
+        <span>/blog</span>
+        <span class="text-[10px] text-[#52525b]">Jump</span>
+      </a>
+      <a href="/terminal" class="cmd-item flex items-center justify-between p-2 rounded text-xs text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa]">
+        <span>/terminal</span>
+        <span class="text-[10px] text-[#52525b]">Jump</span>
+      </a>
+      <a href="/uses" class="cmd-item flex items-center justify-between p-2 rounded text-xs text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa]">
+        <span>/uses</span>
+        <span class="text-[10px] text-[#52525b]">Jump</span>
+      </a>
+      <a href="/now" class="cmd-item flex items-center justify-between p-2 rounded text-xs text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa]">
+        <span>/now</span>
+        <span class="text-[10px] text-[#52525b]">Jump</span>
+      </a>
+      <a href="https://github.com/kuzeyzey11" target="_blank" class="cmd-item flex items-center justify-between p-2 rounded text-xs text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa]">
+        <span>github ↗</span>
+        <span class="text-[10px] text-[#52525b]">External</span>
+      </a>
+      <a href="https://discord.com/users/813830720740130826" target="_blank" class="cmd-item flex items-center justify-between p-2 rounded text-xs text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa]">
+        <span>discord profile ↗</span>
+        <span class="text-[10px] text-[#52525b]">External</span>
+      </a>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.getElementById('cmd-dialog') as HTMLDialogElement;
+  const input = document.getElementById('cmd-input') as HTMLInputElement;
+  const items = document.querySelectorAll('.cmd-item');
+
+  window.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      if (dialog.open) {
+        dialog.close();
+      } else {
+        dialog.showModal();
+        input?.focus();
+      }
+    }
+  });
+
+  input?.addEventListener('input', () => {
+    const query = input.value.toLowerCase();
+    items.forEach((item) => {
+      const text = item.textContent?.toLowerCase() || '';
+      (item as HTMLElement).style.display = text.includes(query) ? 'flex' : 'none';
+    });
+  });
+
+  dialog?.addEventListener('click', (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+</script>

@@ -1,0 +1,26 @@
+---
+---
+<div class="pt-8 border-t border-[#1f1f23] mt-12">
+  <h3 class="text-xs font-mono uppercase tracking-wider text-[#a1a1aa] mb-4">comments</h3>
+  <div id="giscus-container"></div>
+</div>
+
+<script>
+  const script = document.createElement('script');
+  script.src = 'https://giscus.app/client.js';
+  script.setAttribute('data-repo', 'kuzeyzey11/website-v3');
+  script.setAttribute('data-repo-id', 'YOUR_REPO_ID');
+  script.setAttribute('data-category', 'Announcements');
+  script.setAttribute('data-category-id', 'YOUR_CATEGORY_ID');
+  script.setAttribute('data-mapping', 'pathname');
+  script.setAttribute('data-strict', '0');
+  script.setAttribute('data-reactions-enabled', '1');
+  script.setAttribute('data-emit-metadata', '0');
+  script.setAttribute('data-input-position', 'bottom');
+  script.setAttribute('data-theme', 'transparent_dark');
+  script.setAttribute('data-lang', 'en');
+  script.crossOrigin = 'anonymous';
+  script.async = true;
+
+  document.getElementById('giscus-container')?.appendChild(script);
+</script>
