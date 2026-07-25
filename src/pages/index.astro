@@ -1,53 +1,117 @@
 ---
-import "../styles/global.css";
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const featuredProjects = [
+  {
+    title: 'local ai installer',
+    description: 'CLI tool and lightweight runtime for configuring and launching quantized local LLMs in minutes on Linux.',
+    link: 'https://github.com/kuzeyzey11',
+    tags: ['rust', 'linux', 'llm'],
+  },
+  {
+    title: 'dotfiles',
+    description: 'Hyprland, Kitty, and Fish configuration files built for high-performance keyboard-driven productivity.',
+    link: 'https://github.com/kuzeyzey11',
+    tags: ['hyprland', 'fish', 'arch'],
+  }
+];
+
+const latestPosts = (await getCollection('blog'))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
 ---
 
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width" />
+<BaseLayout title="kuzyy" description="Student, builder, open source explorer.">
+  <div class="max-w-2xl mx-auto py-8 sm:py-16 space-y-12">
+    
+    <!-- Hero Section -->
+    <section class="space-y-3">
+      <h1 class="text-xl font-medium tracking-tight text-[#fafafa]">
+        kuzyy
+      </h1>
+      <p class="text-sm text-[#a1a1aa] leading-relaxed">
+        Student, builder, and open-source enthusiast based in Türkiye. Exploring Linux workflows, lightweight web software, and local AI tools.
+      </p>
+      
+      <div class="flex items-center gap-3 text-xs text-[#a1a1aa] pt-2">
+        <a href="https://github.com/kuzeyzey11" target="_blank" rel="noopener noreferrer" class="hover:text-[#fafafa] transition-colors underline underline-offset-4 decoration-[#1f1f23]">
+          github ↗
+        </a>
+        <span>/</span>
+        <a href="mailto:contact@kuzyy.me" class="hover:text-[#fafafa] transition-colors underline underline-offset-4 decoration-[#1f1f23]">
+          email
+        </a>
+      </div>
+    </section>
 
-        <title>kuzyy</title>
+    <!-- Projects Section -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between border-b border-[#1f1f23] pb-2">
+        <h2 class="text-xs uppercase font-mono tracking-wider text-[#a1a1aa]">
+          projects
+        </h2>
+        <a href="/projects" class="text-xs text-[#a1a1aa] hover:text-[#fafafa] transition-colors">
+          all →
+        </a>
+      </div>
 
-        <meta
-            name="description"
-            content="student • linux • ai • builder"
-        />
-    </head>
+      <div class="space-y-4">
+        {featuredProjects.map((project) => (
+          <a
+            href={project.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group block p-4 -mx-4 rounded-lg hover:bg-[#111113] transition-colors"
+          >
+            <div class="flex items-center justify-between mb-1">
+              <h3 class="text-sm font-medium text-[#fafafa] group-hover:text-[#a1a1aa] transition-colors">
+                {project.title}
+              </h3>
+              <span class="text-xs text-[#a1a1aa] opacity-0 group-hover:opacity-100 transition-opacity">↗</span>
+            </div>
+            <p class="text-xs text-[#a1a1aa] leading-relaxed mb-3">
+              {project.description}
+            </p>
+            <div class="flex items-center gap-2 text-[11px] text-[#a1a1aa]">
+              {project.tags.map((tag) => (
+                <span class="px-2 py-0.5 rounded bg-[#18181b] border border-[#27272a] font-mono">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
 
-    <body>
+    <!-- Writing Section -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between border-b border-[#1f1f23] pb-2">
+        <h2 class="text-xs uppercase font-mono tracking-wider text-[#a1a1aa]">
+          writing
+        </h2>
+        <a href="/blog" class="text-xs text-[#a1a1aa] hover:text-[#fafafa] transition-colors">
+          archive →
+        </a>
+      </div>
 
-        <main>
+      <div class="divide-y divide-[#1f1f23]">
+        {latestPosts.map((post) => (
+          <a
+            href={`/blog/${post.slug}`}
+            class="group flex items-center justify-between py-2.5 transition-colors"
+          >
+            <span class="text-sm text-[#fafafa] group-hover:text-[#a1a1aa] transition-colors">
+              {post.data.title.toLowerCase()}
+            </span>
+            <span class="text-xs font-mono text-[#a1a1aa] shrink-0 ml-4">
+              {post.data.pubDate.toISOString().split('T')[0]}
+            </span>
+          </a>
+        ))}
+      </div>
+    </section>
 
-            <section class="hero">
-
-                <h1>kuzyy</h1>
-
-                <p>
-                    student
-                    <br />
-                    linux
-                    <br />
-                    ai
-                    <br />
-                    builder
-                </p>
-
-                <nav>
-
-                    <a href="/projects">projects</a>
-
-                    <a href="/blog">blog</a>
-
-                    <a href="/terminal">terminal</a>
-
-                </nav>
-
-            </section>
-
-        </main>
-
-    </body>
-
-</html>
+  </div>
+</BaseLayout>

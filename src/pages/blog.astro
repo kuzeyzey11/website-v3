@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const posts = [
+  {
+    title: 'Running Local AI on Linux',
+    date: '2026-07-15',
+    excerpt: 'Notes on running quantized open-weights models locally on modern Linux desktops.',
+  },
+  {
+    title: 'Why I Switched to Arch Linux',
+    date: '2026-06-20',
+    excerpt: 'Minimalism, rolling releases, and building a tailored environment from scratch.',
+  },
+  {
+    title: 'Building kuzyy.me with Astro',
+    date: '2026-05-10',
+    excerpt: 'Ditching heavy single-page apps for static HTML, minimal CSS, and high speed.',
+  }
+];
+---
+
+<BaseLayout title="blog — kuzyy" description="thoughts on linux, code, and minimal workflows by kuzyy">
+  <div class="max-w-2xl mx-auto py-8 sm:py-16 space-y-8">
+    <div class="space-y-2 border-b border-[#1f1f23] pb-4">
+      <h1 class="text-lg font-medium text-[#fafafa]">blog</h1>
+      <p class="text-xs text-[#a1a1aa]">thoughts, guides, and technical notes.</p>
+    </div>
+
+    <div class="space-y-6">
+      {posts.map((post) => (
+        <article class="space-y-1">
+          <div class="flex items-center justify-between">
+            <h2 class="text-sm font-medium text-[#fafafa]">
+              {post.title}
+            </h2>
+            <span class="text-xs font-mono text-[#a1a1aa]">{post.date}</span>
+          </div>
+          <p class="text-xs text-[#a1a1aa] leading-relaxed">
+            {post.excerpt}
+          </p>
+        </article>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const projects = [
+  {
+    title: 'local ai installer',
+    description: 'CLI tool and lightweight runtime for configuring and launching quantized local LLMs in minutes on Linux.',
+    link: 'https://github.com/kuzeyzey11',
+    tags: ['rust', 'linux', 'llm'],
+  },
+  {
+    title: 'dotfiles',
+    description: 'Hyprland, Kitty, and Fish configuration files built for high-performance keyboard-driven productivity.',
+    link: 'https://github.com/kuzeyzey11',
+    tags: ['hyprland', 'fish', 'arch'],
+  },
+  {
+    title: 'kuzyy.me',
+    description: 'Minimalist static portfolio and blog constructed with Astro and styled with raw simplicity.',
+    link: 'https://github.com/kuzeyzey11',
+    tags: ['astro', 'typescript', 'tailwind'],
+  }
+];
+---
+
+<BaseLayout title="projects — kuzyy" description="software and configuration setups built by kuzyy">
+  <div class="max-w-2xl mx-auto py-8 sm:py-16 space-y-8">
+    <div class="space-y-2 border-b border-[#1f1f23] pb-4">
+      <h1 class="text-lg font-medium text-[#fafafa]">projects</h1>
+      <p class="text-xs text-[#a1a1aa]">a collection of tools, configurations, and experiments.</p>
+    </div>
+
+    <div class="space-y-4">
+      {projects.map((project) => (
+        <a
+          href={project.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group block p-4 -mx-4 rounded-lg hover:bg-[#111113] transition-colors border border-transparent hover:border-[#1f1f23]"
+        >
+          <div class="flex items-center justify-between mb-1">
+            <h2 class="text-sm font-medium text-[#fafafa] group-hover:text-[#a1a1aa] transition-colors">
+              {project.title}
+            </h2>
+            <span class="text-xs text-[#a1a1aa] opacity-0 group-hover:opacity-100 transition-opacity">↗</span>
+          </div>
+          <p class="text-xs text-[#a1a1aa] leading-relaxed mb-3">
+            {project.description}
+          </p>
+          <div class="flex items-center gap-2 text-[11px] text-[#a1a1aa]">
+            {project.tags.map((tag) => (
+              <span class="px-2 py-0.5 rounded bg-[#18181b] border border-[#27272a] font-mono">
+                {tag}
+              </span>
+            ))}
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

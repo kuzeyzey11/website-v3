@@ -1,91 +1,27 @@
-:root{
+@import "tailwindcss";
 
---bg:#09090b;
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
 
---text:#fafafa;
+  html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #09090b !important;
+    color: #fafafa !important;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
 
---muted:#a1a1aa;
-
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 }
 
-*{
-
-margin:0;
-
-padding:0;
-
-box-sizing:border-box;
-
-}
-
-body{
-
-background:var(--bg);
-
-color:var(--text);
-
-font-family:Inter,sans-serif;
-
-min-height:100vh;
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-}
-
-.hero{
-
-width:min(700px,90%);
-
-}
-
-h1{
-
-font-size:5rem;
-
-font-weight:700;
-
-margin-bottom:1rem;
-
-}
-
-p{
-
-color:var(--muted);
-
-line-height:1.8;
-
-font-size:1.2rem;
-
-}
-
-nav{
-
-display:flex;
-
-gap:2rem;
-
-margin-top:3rem;
-
-}
-
-a{
-
-color:white;
-
-text-decoration:none;
-
-opacity:.8;
-
-transition:.2s;
-
-}
-
-a:hover{
-
-opacity:1;
-
+/* Scoped specifically for /terminal */
+.terminal-font, .terminal-font * {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
 }
