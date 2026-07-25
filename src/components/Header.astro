@@ -1,0 +1,31 @@
+---
+---
+<header class="sticky top-0 z-50 backdrop-blur-md bg-zinc-950/80 border-b border-zinc-800/60">
+  <div class="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
+    <!-- Static Profile & Branding -->
+    <a href="/" class="flex items-center gap-3 group">
+      <div class="relative w-9 h-9 rounded-full overflow-hidden border border-zinc-700/80 group-hover:border-zinc-500 transition-colors bg-zinc-900 flex items-center justify-center">
+        <!-- Static Avatar Image from /public/avatar.png -->
+        <img 
+          src="/avatar.png" 
+          alt="Kuzey Zeyneloğlu" 
+          class="w-full h-full object-cover"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+        />
+        <!-- Fallback initials if avatar.png is missing -->
+        <span class="hidden text-xs font-mono font-bold text-zinc-300">KZ</span>
+      </div>
+      <span class="font-semibold tracking-tight text-zinc-100 group-hover:text-white transition-colors">
+        kuzyy<span class="text-zinc-500">.com</span>
+      </span>
+    </a>
+
+    <!-- Navigation Links -->
+    <nav class="flex items-center gap-6 text-sm font-medium text-zinc-400">
+      <a href="#projects" class="hover:text-zinc-100 transition-colors">Projects</a>
+      <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="hover:text-zinc-100 transition-colors flex items-center gap-1">
+        GitHub
+      </a>
+    </nav>
+  </div>
+</header>
