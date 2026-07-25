@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog'))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<BaseLayout title="blog — kuzyy" description="thoughts on linux, code, and minimal workflows by kuzyy">
+  <div class="max-w-2xl mx-auto py-8 sm:py-16 space-y-8">
+    <div class="space-y-2 border-b border-[#1f1f23] pb-4">
+      <h1 class="text-lg font-medium text-[#fafafa]">blog</h1>
+      <p class="text-xs text-[#a1a1aa]">thoughts, guides, and technical notes.</p>
+    </div>
+
+    <div class="space-y-4">
+      {posts.map((post) => (
+        <a
+          href={`/blog/${post.id}`}
+          class="group block p-3 -mx-3 rounded-lg hover:bg-[#111113] transition-colors space-y-1"
+        >
+          <div class="flex items-center justify-between">
+            <h2 class="text-sm font-medium text-[#fafafa] group-hover:text-[#a1a1aa] transition-colors">
+              {post.data.title.toLowerCase()}
+            </h2>
+            <span class="text-xs font-mono text-[#a1a1aa]">
+              {post.data.pubDate.toISOString().split('T')[0]}
+            </span>
+          </div>
+          <p class="text-xs text-[#a1a1aa] leading-relaxed">
+            {post.data.description}
+          </p>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

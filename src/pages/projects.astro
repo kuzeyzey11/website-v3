@@ -3,58 +3,55 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 const projects = [
   {
-    title: 'local ai installer',
-    description: 'CLI tool and lightweight runtime for configuring and launching quantized local LLMs in minutes on Linux.',
-    link: 'https://github.com/kuzeyzey11',
-    tags: ['rust', 'linux', 'llm'],
+    title: 'website-v3',
+    description: 'Personal minimal portfolio and blog built with Astro, Tailwind CSS, and TypeScript.',
+    tech: ['Astro', 'TypeScript', 'Tailwind CSS'],
+    github: 'https://github.com/kuzeyzey11/website-v3',
+    link: 'https://kuzyy.com'
   },
   {
     title: 'dotfiles',
-    description: 'Hyprland, Kitty, and Fish configuration files built for high-performance keyboard-driven productivity.',
-    link: 'https://github.com/kuzeyzey11',
-    tags: ['hyprland', 'fish', 'arch'],
-  },
-  {
-    title: 'kuzyy.me',
-    description: 'Minimalist static portfolio and blog constructed with Astro and styled with raw simplicity.',
-    link: 'https://github.com/kuzeyzey11',
-    tags: ['astro', 'typescript', 'tailwind'],
+    description: 'Personal Arch Linux + Hyprland environment setup, Kitty terminal, and Neovim configs.',
+    tech: ['Linux', 'Hyprland', 'Lua', 'Bash'],
+    github: 'https://github.com/kuzeyzey11',
   }
 ];
 ---
 
-<BaseLayout title="projects — kuzyy" description="software and configuration setups built by kuzyy">
+<BaseLayout title="projects — kuzyy" description="Featured projects and open-source software built by kuzyy.">
   <div class="max-w-2xl mx-auto py-8 sm:py-16 space-y-8">
     <div class="space-y-2 border-b border-[#1f1f23] pb-4">
       <h1 class="text-lg font-medium text-[#fafafa]">projects</h1>
-      <p class="text-xs text-[#a1a1aa]">a collection of tools, configurations, and experiments.</p>
+      <p class="text-xs text-[#a1a1aa]">open source work, tools, and personal systems.</p>
     </div>
 
-    <div class="space-y-4">
+    <div class="space-y-6">
       {projects.map((project) => (
-        <a
-          href={project.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="group block p-4 -mx-4 rounded-lg hover:bg-[#111113] transition-colors border border-transparent hover:border-[#1f1f23]"
-        >
-          <div class="flex items-center justify-between mb-1">
-            <h2 class="text-sm font-medium text-[#fafafa] group-hover:text-[#a1a1aa] transition-colors">
-              {project.title}
-            </h2>
-            <span class="text-xs text-[#a1a1aa] opacity-0 group-hover:opacity-100 transition-opacity">↗</span>
+        <div class="p-4 rounded-lg border border-[#1f1f23] bg-[#0c0c0e] space-y-3">
+          <div class="flex items-center justify-between">
+            <h2 class="text-sm font-medium text-[#fafafa]">{project.title}</h2>
+            <div class="flex items-center gap-3 text-xs font-mono text-[#a1a1aa]">
+              {project.github && (
+                <a href={project.github} target="_blank" rel="noreferrer" class="hover:text-[#fafafa] transition-colors">
+                  github ↗
+                </a>
+              )}
+              {project.link && (
+                <a href={project.link} target="_blank" rel="noreferrer" class="hover:text-[#fafafa] transition-colors">
+                  live ↗
+                </a>
+              )}
+            </div>
           </div>
-          <p class="text-xs text-[#a1a1aa] leading-relaxed mb-3">
-            {project.description}
-          </p>
-          <div class="flex items-center gap-2 text-[11px] text-[#a1a1aa]">
-            {project.tags.map((tag) => (
-              <span class="px-2 py-0.5 rounded bg-[#18181b] border border-[#27272a] font-mono">
-                {tag}
+          <p class="text-xs text-[#a1a1aa] leading-relaxed">{project.description}</p>
+          <div class="flex flex-wrap gap-2 pt-1">
+            {project.tech.map((t) => (
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-[#18181b] text-[#a1a1aa] border border-[#27272a]">
+                {t}
               </span>
             ))}
           </div>
-        </a>
+        </div>
       ))}
     </div>
   </div>

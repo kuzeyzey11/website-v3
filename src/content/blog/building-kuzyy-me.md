@@ -1,5 +1,5 @@
 ---
-title: "Building kuzyy.me with Astro"
+title: "Building kuzyy.com with Astro"
 description: "Ditching heavy single-page apps for static HTML, minimal CSS, and high speed."
 pubDate: 2026-05-10
 ---
